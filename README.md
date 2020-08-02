@@ -1,5 +1,5 @@
 # asciiArtGenerator
-Description
+
 
 ### Here's the code:
 ```python
