@@ -41,7 +41,7 @@ with open(os.path.expanduser("~/Desktop/ascii_art.txt"), "w") as file:
             else:
                 file.write(x + "\n")
 ```
-In theory it works, but whenever you see the ascii ```symbolArray``` extracted to a text file it doesn't look quite like the image due to the textfile's way of formatting text.
+In theory it works, but whenever you see the ascii ```symbolArray``` extracted to a text file it doesn't look quite like the image due to the text file's way of formatting text.
 
 ### The Breakdown
 ```python
@@ -60,7 +60,7 @@ for i in range(1, len(symbols)):
     else:
         symbolsAndValues[symbols[i]] = (tempLastNum, 255)
 ```
-In this block of code I do a couple of useful things; I converted the images's color to black and white and then loaded in that pixel data using the PIL library, specified which symbols I'd be using for the ascii art, and then built the ```symbolsAndValues``` dictionary. The ```symbolsAndValues``` dictionary consists of black and white color values, which is an RGB value represented by a number between 0 and 255, with their associated symbol. This is what the dictionary looks like if you are using ten different values:
+In this block of code I do a couple of useful things; I converted the images's color to black and white and then loaded in that pixel data using the PIL library, specified which symbols I'd be using for the ascii art, and then built the ```symbolsAndValues``` dictionary. The ```symbolsAndValues``` dictionary consists of black and white color values, which is an RGB value represented by a number between 0 and 255, with their associated symbol. This is what the dictionary looks like if you are using ten different symbols:
 
 ```console
 (0, 23) !
@@ -74,3 +74,25 @@ In this block of code I do a couple of useful things; I converted the images's c
 (185, 208) :
 (208, 255) ~
 ```
+
+```python
+symbolArray = np.empty((im.size[0],im.size[1]), str)
+for x in range(im.size[0]):
+    for y in range(im.size[1]):
+        for symbol in symbolsAndValues:
+            if pixels[x,y] >= symbolsAndValues[symbol][0] and pixels[x,y] <= symbolsAndValues[symbol][1]:
+                symbolArray[x][y] = symbol
+```
+Within this block, the image's pixel data is read and symbols are added to the two dimensional ```symbolArray```. These symbols are added relative to what the pixels color is, which is specified withtin the ```symbolsAndValues``` dictionary.
+
+```python
+with open(os.path.expanduser("~/Desktop/ascii_art.txt"), "w") as file:
+    file.truncate(0)
+    for y in range(len(symbolArray)):
+        for x in symbolArray[y]:
+            if x != len(symbolArray[y]):
+                file.write(x)
+            else:
+                file.write(x + "\n")
+  ```
+And finally within this block of code a text file is added to the user's desktop which contains all the content in the ```symbolsArray``` which contains the ascii art.
